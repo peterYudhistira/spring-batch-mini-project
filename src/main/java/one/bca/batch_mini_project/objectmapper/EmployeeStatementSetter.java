@@ -11,7 +11,8 @@ public class EmployeeStatementSetter implements ItemPreparedStatementSetter<Empl
     public void setValues(Employee employee, PreparedStatement ps) throws SQLException {
         // employeeId tidak dimasukkan karena autoincrement
         ps.setString(1, employee.getEmployeeName());
-        ps.setInt(2, employee.getYearlyLeaveTotal());
-        ps.setInt(3, employee.getOvertimeMinutes());
+        ps.setInt(2, employee.getTotalEmployeeLeave());
+        ps.setInt(3, employee.getTotalLeaveLeft());
+        ps.setInt(4, employee.getTotalEmployeeOvertime());
     }
 }
