@@ -1,4 +1,4 @@
-package one.bca.batch_mini_project.steps;
+package one.bca.batch_mini_project.configuration;
 
 import org.springframework.batch.item.database.PagingQueryProvider;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
@@ -8,7 +8,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-public class EmployeeReader {
+public class EmployeeConfiguration {
 
     private DataSourceTransactionManager dataSourceTransactionManager;
 

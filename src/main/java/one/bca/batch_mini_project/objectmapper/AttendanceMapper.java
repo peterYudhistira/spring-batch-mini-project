@@ -1,23 +1,21 @@
 package one.bca.batch_mini_project.objectmapper;
 
 import one.bca.batch_mini_project.model.Attendance;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.batch.item.file.mapping.FieldSetMapper;
+import org.springframework.batch.item.file.transform.FieldSet;
+import org.springframework.validation.BindException;
+import java.sql.Time;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-
-public class AttendanceMapper implements RowMapper<Attendance> {
-
+public class AttendanceMapper implements FieldSetMapper<Attendance> {
     @Override
-    public Attendance mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public Attendance mapFieldSet(FieldSet rs) throws BindException{
         Attendance attendance = new Attendance();
-        attendance.setAttendanceId(rs.getLong("attendance_id"));
-        attendance.setEmployeeId(rs.getLong("emp_id"));
-        attendance.setAttendanceDate(rs.getDate("date"));
-        attendance.setClockInTime( rs.getTime("clock_in"));
-        attendance.setClockOutTime( rs.getTime("clock_out"));
-        attendance.setLeave(rs.getBoolean("is_leave"));
+        attendance.setAttendanceId(rs.readLong("attendance_id"));
+        attendance.setEmployeeId(rs.readLong("emp_id"));
+        attendance.setAttendanceDate(rs.readDate("date")); // readDate second parameter is pattern.
+        attendance.setClockInTime(Time.valueOf(rs.readString("clock_in")) ); // time is kinda finicky?
+        attendance.setClockOutTime(Time.valueOf(rs.readString("clock_out")));
+        attendance.setLeave(rs.readBoolean("is_leave"));
         return attendance;
     }
 }
