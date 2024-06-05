@@ -1,0 +1,22 @@
+INSERT INTO employee (emp_name, total_emp_leave, emp_leave_left, total_emp_overtime)
+VALUES
+    ('Andra', 0, 10, 0),
+    ('Bayu', 0, 10, 0),
+    ('Citra', 0, 10, 0),
+    ('Deni', 0, 10, 0),
+    ('Eka', 0, 10, 0),
+    ('Fitri', 0, 10, 0),
+    ('Gilang', 0, 10, 0),
+    ('Hendra', 0, 10, 0),
+    ('Isna', 0, 10, 0),
+    ('Joko', 0, 10, 0),
+    ('Kelvin', 0, 10, 0),
+    ('Liana', 0, 10, 0),
+    ('Mega', 0, 10, 0),
+    ('Nina', 0, 10, 0),
+    ('Oka', 0, 10, 0),
+    ('Putra', 0, 10, 0),
+    ('Quincy', 0, 10, 0),
+    ('Rita', 0, 10, 0),
+    ('Sari', 0, 10, 0),
+    ('Tono', 0, 10, 0);
