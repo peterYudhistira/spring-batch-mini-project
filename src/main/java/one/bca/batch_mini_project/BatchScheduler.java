@@ -8,6 +8,6 @@ public class BatchScheduler {
 
     @Scheduled(fixedRate = 5000)
     public void runJob(){
-        System.out.println("Running Batch Job!");
+        System.out.println("Running Batch Job! test push");
     }
 }
