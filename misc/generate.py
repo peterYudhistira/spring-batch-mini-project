@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 # this yields one row of data
 def getAttendance(attendanceIndex:int, employee, date, attendanceType):
-    resultString = str(attendanceIndex) + "," + employee[1] + "," + date.strftime("%Y-%m-%d")
+    resultString = str(attendanceIndex) + "," + str(employee[0]) + "," + employee[1] + "," + date.strftime("%Y-%m-%d")
     if attendanceType == "normal":
         resultString += "," + attendNormal(date)
     elif attendanceType == "undertime":
@@ -50,9 +50,15 @@ curDate = datetime(2024, 6, 5, 8, 0, 0)
 
 f = open("attendance_log.csv", "w")
 f.write("attendance_id, emp_id,emp_name,date,clock_in,clock_out,is_leave\n")
-for i in range(1, 20):
+for i in range(1, 21):
     for employee in employeeList:
         f.write(getAttendance(attendanceIndex, employee, curDate, random.choices(randomAttendance_option, randomAttendance_weight)[0]))
         attendanceIndex += 1
     curDate += timedelta(days=1)
+f.close()
+
+f = open("employee_list.sql", "w")
+f.write("INSERT INTO employee (emp_name, total_emp_leave, emp_leave_left, total_emp_overtime) VALUES\n")
+for employee in employeeList:
+    f.write( "('" + employee[1] + "', " + "0, 10, 0" + "),\n")
 f.close()
