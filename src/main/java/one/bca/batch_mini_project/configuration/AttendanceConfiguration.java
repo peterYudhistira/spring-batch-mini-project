@@ -6,8 +6,7 @@ import one.bca.batch_mini_project.objectmapper.AttendanceMapper;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.ExecutionContext;
-import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.*;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
@@ -53,6 +52,22 @@ public class AttendanceConfiguration {
         return new StepBuilder("getAttendanceStep", jobRepository)
                 .<Attendance, Attendance>chunk(10, transactionManager)
                 .reader(csvAttendanceReader())
+                .processor(new ItemProcessor<Attendance, Attendance>() {
+
+                    @Override
+                    public Attendance process(Attendance item) throws Exception {
+                        System.out.println("the item is " + item);
+
+                        return item;
+                    }
+                })
+                .writer(new ItemWriter<Attendance>() {
+
+                    @Override
+                    public void write(Chunk<? extends Attendance> chunk) throws Exception {
+                        
+                    }
+                })
                 .build();
     }
 }
