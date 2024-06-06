@@ -39,7 +39,7 @@ public class AttendanceConfiguration {
         reader.setLinesToSkip(1);
         reader.setResource(new FileSystemResource("data/attendance_log.csv"));
         DefaultLineMapper<Attendance> lineMapper = new DefaultLineMapper<Attendance>();
-        DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer(";");
+        DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer(",");
         tokenizer.setNames(tokens);
         lineMapper.setLineTokenizer(tokenizer);
         lineMapper.setFieldSetMapper(new AttendanceMapper());
