@@ -2,11 +2,14 @@ package one.bca.batch_mini_project.configuration;
 
 import lombok.Data;
 import one.bca.batch_mini_project.model.Attendance;
+import one.bca.batch_mini_project.model.Employee;
 import one.bca.batch_mini_project.objectmapper.AttendanceMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.scope.context.StepContext;
+import org.springframework.batch.core.scope.context.StepSynchronizationManager;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.*;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -16,6 +19,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import java.util.List;
 
 @Configuration
 @Data
@@ -58,8 +63,16 @@ public class AttendanceConfiguration {
 
                     @Override
                     public Attendance process(Attendance item) throws Exception {
-                        System.out.println("the item is " + item);
+                        // pull out the Employee item here
+                        StepContext stepContext = StepSynchronizationManager.getContext();
+                        List<Employee> employeeList = (List<Employee>) stepContext.getStepExecution().getJobExecution().getExecutionContext().get("employeeList");
 
+                        for (Employee employee : employeeList) {
+                            if(employee.getEmployeeId() == item.getEmployeeId()){
+                                System.out.println("Jackpot! " + item.getEmployeeName());
+                            }
+                        }
+                        // then put it to context
                         return item;
                     }
                 })
@@ -80,4 +93,6 @@ public class AttendanceConfiguration {
                 .start(getAttendanceStep())
                 .build();
     }
+
+    // put functions that help the processor here
 }

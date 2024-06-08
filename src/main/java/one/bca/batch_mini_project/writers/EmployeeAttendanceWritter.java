@@ -1,4 +1,4 @@
-package one.bca.batch_mini_project.configuration;
+package one.bca.batch_mini_project.writers;
 
 import one.bca.batch_mini_project.model.EmployeeAttendance;
 import org.springframework.batch.item.Chunk;
