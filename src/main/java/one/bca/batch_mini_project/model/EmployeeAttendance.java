@@ -9,7 +9,7 @@ import java.util.Date;
 // this is the resulting object from the processor layer
 @Data
 public class EmployeeAttendance implements Serializable {
-    private Long employeeAttendanceId; // sepertinya ngga perlu
+//    private Long employeeAttendanceId; // sepertinya ngga perlu
     private Long employeeId;
     private String employeeName;
     private Integer totalHoursWorked; // aggregate from sum(clockOutTime - clockInTime)

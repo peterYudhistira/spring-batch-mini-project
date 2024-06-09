@@ -14,6 +14,6 @@ public class Attendance implements Serializable {
     private Date attendanceDate;
     private Time clockInTime;
     private Time clockOutTime;
-    private boolean isLeave;
+    private Boolean leave;
 
 }

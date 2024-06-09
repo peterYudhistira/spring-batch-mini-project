@@ -3,6 +3,7 @@ package one.bca.batch_mini_project.configuration;
 import lombok.Data;
 import one.bca.batch_mini_project.model.Attendance;
 import one.bca.batch_mini_project.model.Employee;
+import one.bca.batch_mini_project.model.EmployeeAttendance;
 import one.bca.batch_mini_project.objectmapper.AttendanceMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -15,11 +16,15 @@ import org.springframework.batch.item.*;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import java.util.List;
 
 @Configuration
@@ -38,6 +43,7 @@ public class AttendanceConfiguration {
 
     private final JobRepository jobRepository;
     private final DataSourceTransactionManager transactionManager;
+    private final MessageSource messageSource;
 
     public ItemReader<Attendance> csvAttendanceReader(){
         FlatFileItemReader<Attendance> reader = new FlatFileItemReader<>();
@@ -65,14 +71,14 @@ public class AttendanceConfiguration {
                     public Attendance process(Attendance item) throws Exception {
                         // pull out the Employee item here
                         StepContext stepContext = StepSynchronizationManager.getContext();
-                        List<Employee> employeeList = (List<Employee>) stepContext.getStepExecution().getJobExecution().getExecutionContext().get("employeeList");
+                        List<EmployeeAttendance> employeeAttendanceList = (List<EmployeeAttendance>) stepContext.getStepExecution().getJobExecution().getExecutionContext().get("employeeAttendanceList");
 
-                        for (Employee employee : employeeList) {
-                            if(employee.getEmployeeId() == item.getEmployeeId()){
+                        for (EmployeeAttendance employeeAttendance : employeeAttendanceList) {
+                            if(employeeAttendance.getEmployeeId() == item.getEmployeeId()){
                                 System.out.println("Jackpot! " + item.getEmployeeName());
+                                CalculateWorkingHours(item, employeeAttendance);
                             }
                         }
-                        // then put it to context
                         return item;
                     }
                 })
@@ -95,4 +101,21 @@ public class AttendanceConfiguration {
     }
 
     // put functions that help the processor here
+    public static void CalculateWorkingHours(Attendance item, EmployeeAttendance employeeAttendance){
+        if (item.getLeave()){
+            // if leave, increment leave only
+            employeeAttendance.setTotalLeaveDays(employeeAttendance.getTotalLeaveDays() + 1);
+        }else {
+            Duration durHours = Duration.between(item.getClockInTime().toLocalTime(), item.getClockOutTime().toLocalTime());
+            if(durHours.toHours() >= 10){
+                // if at least 10 hours, the excess starting from the 9th hour is counted as overtime
+                employeeAttendance.setTotalOvertimeHoursWorked(employeeAttendance.getTotalOvertimeHoursWorked() + (int) (durHours.toHours() - 8 - 1));
+                // also add 8
+                employeeAttendance.setTotalHoursWorked(employeeAttendance.getTotalHoursWorked() + 8);
+            }else{
+                // otherwise just add the delta into it
+                employeeAttendance.setTotalHoursWorked(employeeAttendance.getTotalHoursWorked() + (int) durHours.toHours());
+            }
+        }
+    }
 }

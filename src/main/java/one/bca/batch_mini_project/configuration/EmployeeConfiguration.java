@@ -2,6 +2,7 @@ package one.bca.batch_mini_project.configuration;
 
 import lombok.Data;
 import one.bca.batch_mini_project.model.Employee;
+import one.bca.batch_mini_project.model.EmployeeAttendance;
 import one.bca.batch_mini_project.readers.EmployeeReader;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;
@@ -33,16 +34,23 @@ public class EmployeeConfiguration {
                 .processor(new ItemProcessor<Employee, Employee>() {
                     @Override
                     public Employee process(Employee employee) throws Exception {
+                        // prepare context to contain List<EmployeeAttendance>
                         StepContext stepContext = StepSynchronizationManager.getContext();
-                        List<Employee> processedItems = (List<Employee>) stepContext.getStepExecution().getJobExecution().getExecutionContext().get("employeeList");
+                        List<EmployeeAttendance> employeeAttendanceList = (List<EmployeeAttendance>) stepContext.getStepExecution().getJobExecution().getExecutionContext().get("employeeAttendanceList");
+                        if(employeeAttendanceList == null) employeeAttendanceList = new ArrayList<>();
 
-                        if(processedItems == null) {
-                            processedItems = new ArrayList<>();
-                            processedItems.add(employee);
-                        }else {
-                            processedItems.add(employee);
-                        }
-                        stepContext.getStepExecution().getJobExecution().getExecutionContext().put("employeeList", processedItems);
+                        // load the EmployeeAttendance instance with current Employee ID. There should be 1:1
+                        EmployeeAttendance employeeAttendance = new EmployeeAttendance();
+                        employeeAttendance.setEmployeeId(employee.getEmployeeId());
+                        employeeAttendance.setEmployeeName(employee.getEmployeeName());
+
+                        // lazy setter. can be better
+                        if (employeeAttendance.getTotalLeaveDays() == null) employeeAttendance.setTotalLeaveDays(0);
+                        if (employeeAttendance.getTotalHoursWorked() == null) employeeAttendance.setTotalHoursWorked(0);
+                        if (employeeAttendance.getTotalOvertimeHoursWorked() == null) employeeAttendance.setTotalOvertimeHoursWorked(0);
+                        employeeAttendanceList.add(employeeAttendance);
+
+                        stepContext.getStepExecution().getJobExecution().getExecutionContext().put("employeeAttendanceList", employeeAttendanceList);
                         return employee;
                     }
                 })

@@ -16,7 +16,7 @@ public class AttendanceMapper implements FieldSetMapper<Attendance> {
         attendance.setAttendanceDate(rs.readDate("date")); // readDate second parameter is pattern.
         attendance.setClockInTime(Time.valueOf(rs.readString("clock_in")) ); // time is kinda finicky?
         attendance.setClockOutTime(Time.valueOf(rs.readString("clock_out")));
-        attendance.setLeave(rs.readBoolean("is_leave"));
+        attendance.setLeave(rs.readInt("is_leave") == 1);
         return attendance;
     }
 }
