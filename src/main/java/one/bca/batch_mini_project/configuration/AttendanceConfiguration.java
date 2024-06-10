@@ -2,7 +2,6 @@ package one.bca.batch_mini_project.configuration;
 
 import lombok.Data;
 import one.bca.batch_mini_project.model.Attendance;
-import one.bca.batch_mini_project.model.Employee;
 import one.bca.batch_mini_project.model.EmployeeAttendance;
 import one.bca.batch_mini_project.objectmapper.AttendanceMapper;
 import org.springframework.batch.core.Job;
@@ -23,8 +22,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 import java.util.List;
 
 @Configuration
@@ -73,19 +70,21 @@ public class AttendanceConfiguration {
                         List<EmployeeAttendance> employeeAttendanceList = (List<EmployeeAttendance>) stepContext.getStepExecution().getJobExecution().getExecutionContext().get("employeeAttendanceList");
                         for (EmployeeAttendance employeeAttendance : employeeAttendanceList) {
                             if(employeeAttendance.getEmployeeId() == item.getEmployeeId()){
-                                System.out.println("Jackpot! " + item.getEmployeeName());
+                                System.out.println(item.getEmployeeName() + " " + Thread.currentThread().getName());
                                 CalculateWorkingHours(item, employeeAttendance);
                             }
                         }
+
                         return item;
                     }
                 })
                 .writer(new ItemWriter<Attendance>() {
                     @Override
                     public void write(Chunk<? extends Attendance> chunk) throws Exception {
-                        
+
                     }
                 })
+                .taskExecutor(JobConfiguration.taskExecutor())
                 .build();
     }
 

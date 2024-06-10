@@ -6,7 +6,9 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
 @Data
@@ -25,5 +27,16 @@ public class JobConfiguration {
                 .next(employeeAttendanceConfiguration.updateDBStep())
                 .next(employeeAttendanceConfiguration.generateReportStep())
                 .build();
+    }
+
+    @Bean(name = "asyncTaskExecutor")
+    public static AsyncTaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(10);
+        executor.setQueueCapacity(25);
+        executor.setThreadNamePrefix("async-executor");
+        executor.initialize();
+        return executor;
     }
 }

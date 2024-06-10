@@ -80,6 +80,7 @@ public class EmployeeAttendanceConfiguration {
                     }
                 })
                 .writer(employeeAttendanceWriter.employeeAttendanceItemWriter()) // write the employeeAttendanceList contents to dir here
+                .taskExecutor(JobConfiguration.taskExecutor())
                 .build();
     }
 

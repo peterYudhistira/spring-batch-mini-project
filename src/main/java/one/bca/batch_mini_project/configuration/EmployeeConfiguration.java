@@ -13,6 +13,7 @@ import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Component;
 
@@ -59,6 +60,7 @@ public class EmployeeConfiguration {
                     public void write(Chunk<? extends Employee> chunk) throws Exception {
                     }
                 })
+                .taskExecutor(JobConfiguration.taskExecutor())
                 .build();
 
     }
