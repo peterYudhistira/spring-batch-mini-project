@@ -26,6 +26,7 @@ public class EmployeeReader {
                 .name("employeeReader")
                 .sql(GET_EMPLOYEE_SQL)
                 .rowMapper(new EmployeeMapper())
+                .verifyCursorPosition(false)
                 .build();
     }
 }
