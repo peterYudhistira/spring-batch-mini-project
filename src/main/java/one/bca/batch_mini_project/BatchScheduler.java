@@ -1,6 +1,8 @@
 package one.bca.batch_mini_project;
 
+import lombok.Data;
 import one.bca.batch_mini_project.configuration.AttendanceConfiguration;
+import one.bca.batch_mini_project.configuration.JobConfiguration;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -12,14 +14,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @EnableScheduling
+@Data
 public class BatchScheduler {
     private final JobLauncher jobLauncher;
 
-    private final AttendanceConfiguration attendanceConfiguration;
+    private final JobConfiguration jobConfiguration;
 
-    public BatchScheduler(JobLauncher jobLauncher, AttendanceConfiguration attendanceConfiguration) {
+    public BatchScheduler(JobLauncher jobLauncher, JobConfiguration jobConfiguration) {
         this.jobLauncher = jobLauncher;
-        this.attendanceConfiguration = attendanceConfiguration;
+        this.jobConfiguration = jobConfiguration;
     }
 
     @Scheduled(cron="0 0 0 1 1/1 *")
@@ -29,10 +32,12 @@ public class BatchScheduler {
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("time", System.currentTimeMillis())
                     .toJobParameters();
-            jobLauncher.run(attendanceConfiguration.attendanceJob(), jobParameters);
+            jobLauncher.run(jobConfiguration.employeeAttendanceJob(), jobParameters);
         } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException |
                  JobParametersInvalidException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

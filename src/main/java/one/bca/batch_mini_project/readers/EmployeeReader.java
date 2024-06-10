@@ -19,6 +19,7 @@ public class EmployeeReader {
 
     public static String GET_EMPLOYEE_SQL = "SELECT emp_id, emp_name, total_emp_leave, total_emp_overtime FROM employee;";
 
+
     public ItemReader<Employee> employeeReader(DataSource dataSource) {
         return new JdbcCursorItemReaderBuilder<Employee>()
                 .dataSource(dataSource)

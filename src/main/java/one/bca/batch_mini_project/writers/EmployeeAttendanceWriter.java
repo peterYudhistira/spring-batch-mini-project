@@ -7,9 +7,12 @@ import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.stereotype.Component;
 
-public class EmployeeAttendanceWritter {
+@Component
+public class EmployeeAttendanceWriter {
     public static String[] names = new String[] { "employeeId", "employeeName", "totalHoursWorked", "totalOvertimeHoursWorked", "totalLeaveDays" };
 
     @Bean
@@ -18,7 +21,7 @@ public class EmployeeAttendanceWritter {
 
         Chunk<? extends EmployeeAttendance> data = new Chunk<>();
 
-        itemWriter.setResource(new FileSystemResource("data/shipped_orders_output2.csv"));
+        itemWriter.setResource(new FileSystemResource("data/Employee_report.csv"));
 
         DelimitedLineAggregator<EmployeeAttendance> aggregator = new DelimitedLineAggregator<EmployeeAttendance>();
         aggregator.setDelimiter(",");

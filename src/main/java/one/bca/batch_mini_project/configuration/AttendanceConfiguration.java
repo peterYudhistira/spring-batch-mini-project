@@ -66,13 +66,11 @@ public class AttendanceConfiguration {
                 .<Attendance, Attendance>chunk(10, transactionManager)
                 .reader(csvAttendanceReader())
                 .processor(new ItemProcessor<Attendance, Attendance>() {
-
                     @Override
                     public Attendance process(Attendance item) throws Exception {
                         // pull out the Employee item here
                         StepContext stepContext = StepSynchronizationManager.getContext();
                         List<EmployeeAttendance> employeeAttendanceList = (List<EmployeeAttendance>) stepContext.getStepExecution().getJobExecution().getExecutionContext().get("employeeAttendanceList");
-
                         for (EmployeeAttendance employeeAttendance : employeeAttendanceList) {
                             if(employeeAttendance.getEmployeeId() == item.getEmployeeId()){
                                 System.out.println("Jackpot! " + item.getEmployeeName());
@@ -83,7 +81,6 @@ public class AttendanceConfiguration {
                     }
                 })
                 .writer(new ItemWriter<Attendance>() {
-
                     @Override
                     public void write(Chunk<? extends Attendance> chunk) throws Exception {
                         
