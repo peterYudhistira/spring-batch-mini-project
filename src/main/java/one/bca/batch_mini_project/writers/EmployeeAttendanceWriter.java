@@ -25,6 +25,9 @@ public class EmployeeAttendanceWriter {
         Chunk<? extends EmployeeAttendance> data = new Chunk<>();
 
         itemWriter.setResource(new FileSystemResource("data/Employee_attendance_report_"+ new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) +".csv"));
+        itemWriter.setHeaderCallback(writer -> {
+            writer.write("employeeId,employeeName,totalHoursWorked,totalOvertimeHoursWorked,totalLeaveDays");
+        });
 
         DelimitedLineAggregator<EmployeeAttendance> aggregator = new DelimitedLineAggregator<EmployeeAttendance>();
         aggregator.setDelimiter(",");
