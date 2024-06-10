@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 @Component
 public class EmployeeAttendanceWriter {
     public static String[] names = new String[] { "employeeId", "employeeName", "totalHoursWorked", "totalOvertimeHoursWorked", "totalLeaveDays" };
@@ -21,7 +24,7 @@ public class EmployeeAttendanceWriter {
 
         Chunk<? extends EmployeeAttendance> data = new Chunk<>();
 
-        itemWriter.setResource(new FileSystemResource("data/Employee_report.csv"));
+        itemWriter.setResource(new FileSystemResource("data/Employee_attendance_report_"+ new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) +".csv"));
 
         DelimitedLineAggregator<EmployeeAttendance> aggregator = new DelimitedLineAggregator<EmployeeAttendance>();
         aggregator.setDelimiter(",");

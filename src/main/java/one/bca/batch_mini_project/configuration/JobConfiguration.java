@@ -22,8 +22,8 @@ public class JobConfiguration {
         return new JobBuilder("ReportingJob", jobRepository)
                 .start(employeeConfiguration.getEmployeeStep())
                 .next(attendanceConfiguration.getAttendanceStep())
-                .next(employeeAttendanceConfiguration.generateReportStep())
                 .next(employeeAttendanceConfiguration.updateDBStep())
+                .next(employeeAttendanceConfiguration.generateReportStep())
                 .build();
     }
 }
