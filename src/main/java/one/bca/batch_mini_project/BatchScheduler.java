@@ -25,7 +25,7 @@ public class BatchScheduler {
         this.jobConfiguration = jobConfiguration;
     }
 
-    @Scheduled(cron="0 0 0 1 1/1 *")
+    @Scheduled(cron="0 0 1 * *")
     public void runJob(){
         try{
             System.out.println("Running Batch Job!");
