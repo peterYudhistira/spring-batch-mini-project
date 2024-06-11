@@ -10,6 +10,6 @@ public class Employee implements Serializable {
     private String employeeName;
     private int totalEmployeeLeave; // jumlah cuti total
     private int totalLeaveLeft; // jumlah cuti yang tersisa
-    private int totalEmployeeOvertime; // durasi  lembur dalam jam. menurutku ini bisa dihapus aja, digantikan dengan hasil processing data?
+    private int totalEmployeeOvertime; // durasi  lembur dalam jam
 
 }

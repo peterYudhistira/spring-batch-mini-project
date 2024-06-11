@@ -1,4 +1,4 @@
-drop table employee;
+drop table if exists employee;
 create table if not exists employee(
     emp_id SERIAL,
     emp_name VARCHAR(20),

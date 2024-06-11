@@ -22,10 +22,7 @@ public class JobConfiguration {
     // ini job yang dipanggil
     public Job employeeAttendanceJob() throws Exception {
         return new JobBuilder("ReportingJob", jobRepository)
-                .start(employeeConfiguration.getEmployeeStep())
-                .next(attendanceConfiguration.getAttendanceStep())
-                .next(employeeAttendanceConfiguration.updateDBStep())
-                .next(employeeAttendanceConfiguration.generateReportStep())
+                .start(attendanceConfiguration.getAttendanceStep())
                 .build();
     }
 
@@ -37,6 +34,7 @@ public class JobConfiguration {
         executor.setQueueCapacity(25);
         executor.setThreadNamePrefix("async-executor");
         executor.initialize();
-        return executor;
+//        return executor;
+        return null;
     }
 }
