@@ -9,4 +9,6 @@ public class Report {
     private int totalWorkingHours;
     private int totalOvertimeHours;
     private int totalLeave;
+    private int totalAttendance;
+    private int empLeaveLeft;
 }

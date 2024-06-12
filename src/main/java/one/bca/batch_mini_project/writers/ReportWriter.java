@@ -14,7 +14,7 @@ import java.util.Calendar;
 
 @Component
 public class ReportWriter {
-    public static String[] names = new String[] { "empId", "empName", "totalWorkingHours", "totalOvertimeHours", "totalLeave" };
+    public static String[] names = new String[] { "empId", "empName", "totalWorkingHours", "totalOvertimeHours", "totalLeave", "totalAttendance", "empLeaveLeft" };
 
     @Bean
     public ItemWriter<Report> reportItemWriter(){
@@ -24,7 +24,7 @@ public class ReportWriter {
 
         itemWriter.setResource(new FileSystemResource("data/Employee_attendance_report_"+ new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) +".csv"));
         itemWriter.setHeaderCallback(writer -> {
-            writer.write("empId,empName,totalWorkingHours,totalOvertimeHours,totalLeave");
+            writer.write("empId,empName,totalWorkingHours,totalOvertimeHours,totalLeave,totalAttendance,empLeaveLeft");
         });
 
         DelimitedLineAggregator<Report> aggregator = new DelimitedLineAggregator<Report>();

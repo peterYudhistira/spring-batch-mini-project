@@ -16,7 +16,8 @@ public class ReportRowMapper implements RowMapper<Report> {
         report.setTotalWorkingHours(rs.getInt("total_working_hours"));
         report.setTotalOvertimeHours(rs.getInt("total_overtime_hours"));
         report.setTotalLeave(rs.getInt("total_leave"));
+        report.setTotalAttendance(rs.getInt("total_attendance"));
+        report.setEmpLeaveLeft(rs.getInt("emp_leave_left"));
         return report;
     }
-
 }

@@ -19,18 +19,23 @@ public class AttendanceLogDbReader {
 
         factory.setSelectClause(
                 "select " +
-                        "emp_id, " +
-                        "emp_name, " +
+                        "em.emp_id as emp_id, " +
+                        "em.emp_name as emp_name, " +
                         "sum(working_hours) as total_working_hours, " +
                         "sum(overtime_hours) as total_overtime_hours, " +
-                        "sum(is_leave) as total_leave"
+                        "sum(is_leave) as total_leave, " +
+                        "(count(em.emp_id) - sum(al.is_leave)) as total_attendance, " +
+                        "em.emp_leave_left as emp_leave_left "
         );
-        factory.setFromClause("from attendance_log");
+        factory.setFromClause(
+                "from attendance_log al " +
+                "join employee em on al.emp_id = em.emp_id"
+        );
         factory.setSortKey("emp_id");
         factory.setWhereClause(
                 "where extract(month from attended_date) = '6' and extract(year from attended_date) = '2024'"
         );
-        factory.setGroupClause("group by emp_id, emp_name");
+        factory.setGroupClause("group by em.emp_id, em.emp_name");
         factory.setDataSource(dataSource);
         return factory.getObject();
     }

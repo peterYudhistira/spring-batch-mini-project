@@ -1,40 +1,36 @@
 package one.bca.batch_mini_project.configuration;
 
-import one.bca.batch_mini_project.model.Report;
-import one.bca.batch_mini_project.objectmapper.ReportRowMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.database.PagingQueryProvider;
-import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
-import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import javax.sql.DataSource;
-
 @Configuration
 public class JobConfiguration {
     private final JobRepository jobRepository;
     private final AttendanceLogConfiguration attendanceLogConfiguration;
+    private final UpdateEmployeeConfiguration updateEmployeeConfiguration;
     private final ReportConfiguration reportConfiguration;
 
     public JobConfiguration(
             JobRepository jobRepository,
             AttendanceLogConfiguration attendanceLogConfiguration,
+            UpdateEmployeeConfiguration updateEmployeeConfiguration,
             ReportConfiguration reportConfiguration
     ) {
         this.jobRepository = jobRepository;
         this.attendanceLogConfiguration = attendanceLogConfiguration;
+        this.updateEmployeeConfiguration = updateEmployeeConfiguration;
         this.reportConfiguration = reportConfiguration;
     }
 
     public Job employeeAttendanceJob() throws Exception {
         return new JobBuilder("ReportingJob", jobRepository)
                 .start(attendanceLogConfiguration.calculateWorkingHoursStep())
+                .next(updateEmployeeConfiguration.updateEmployeeStep())
                 .next(reportConfiguration.generateReportStep())
                 .build();
     }

@@ -1,8 +1,6 @@
 package one.bca.batch_mini_project.configuration;
 
 import one.bca.batch_mini_project.model.Report;
-import one.bca.batch_mini_project.readers.AttendanceLogDbReader;
-import one.bca.batch_mini_project.writers.ReportWriter;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
