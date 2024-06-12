@@ -4,6 +4,7 @@ import one.bca.batch_mini_project.model.Attendance;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
+
 import java.sql.Time;
 
 public class AttendanceMapper implements FieldSetMapper<Attendance> {

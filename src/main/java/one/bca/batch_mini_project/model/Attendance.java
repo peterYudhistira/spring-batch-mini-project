@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
 
-@Data // this annotation gives auto setter-getter
+@Data
 public class Attendance implements Serializable {
     private Long attendanceId;
     private Long employeeId;
@@ -15,5 +15,4 @@ public class Attendance implements Serializable {
     private Time clockInTime;
     private Time clockOutTime;
     private Boolean leave;
-
 }

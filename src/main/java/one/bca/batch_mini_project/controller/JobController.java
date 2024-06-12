@@ -1,6 +1,5 @@
 package one.bca.batch_mini_project.controller;
 import lombok.Data;
-import one.bca.batch_mini_project.configuration.AttendanceConfiguration;
 import one.bca.batch_mini_project.configuration.JobConfiguration;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;

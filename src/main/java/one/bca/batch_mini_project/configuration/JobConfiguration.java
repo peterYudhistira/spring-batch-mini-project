@@ -1,31 +1,41 @@
 package one.bca.batch_mini_project.configuration;
 
-import lombok.Data;
+import one.bca.batch_mini_project.model.Report;
+import one.bca.batch_mini_project.objectmapper.ReportRowMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.database.PagingQueryProvider;
+import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.AsyncTaskExecutor;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import javax.sql.DataSource;
+
 @Configuration
-@Data
 public class JobConfiguration {
     private final JobRepository jobRepository;
-    private final EmployeeConfiguration employeeConfiguration;
-    private final AttendanceConfiguration attendanceConfiguration;
-    private final EmployeeAttendanceConfiguration employeeAttendanceConfiguration;
+    private final AttendanceLogConfiguration attendanceLogConfiguration;
+    private final ReportConfiguration reportConfiguration;
 
+    public JobConfiguration(
+            JobRepository jobRepository,
+            AttendanceLogConfiguration attendanceLogConfiguration,
+            ReportConfiguration reportConfiguration
+    ) {
+        this.jobRepository = jobRepository;
+        this.attendanceLogConfiguration = attendanceLogConfiguration;
+        this.reportConfiguration = reportConfiguration;
+    }
 
-    // ini job yang dipanggil
     public Job employeeAttendanceJob() throws Exception {
         return new JobBuilder("ReportingJob", jobRepository)
-                .start(employeeConfiguration.getEmployeeStep())
-                .next(attendanceConfiguration.getAttendanceStep())
-                .next(employeeAttendanceConfiguration.updateDBStep())
-                .next(employeeAttendanceConfiguration.generateReportStep())
+                .start(attendanceLogConfiguration.calculateWorkingHoursStep())
+                .next(reportConfiguration.generateReportStep())
                 .build();
     }
 
