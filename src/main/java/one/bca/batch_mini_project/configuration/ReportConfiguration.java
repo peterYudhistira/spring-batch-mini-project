@@ -1,5 +1,6 @@
 package one.bca.batch_mini_project.configuration;
 
+import one.bca.batch_mini_project.listener.RetryLogListener;
 import one.bca.batch_mini_project.model.Report;
 import one.bca.batch_mini_project.readers.AttendanceLogDbReader;
 import one.bca.batch_mini_project.writers.ReportWriter;
@@ -35,6 +36,10 @@ public class ReportConfiguration {
                 .<Report, Report>chunk(10, transactionManager)
                 .reader(attendanceLogDbReader.itemReader(transactionManager.getDataSource()))
                 .writer(reportWriter.reportItemWriter())
+                .faultTolerant()
+                .retry(Exception.class)
+                .retryLimit(10)
+                .listener(new RetryLogListener())
                 .taskExecutor(JobConfiguration.taskExecutor())
                 .build();
     }

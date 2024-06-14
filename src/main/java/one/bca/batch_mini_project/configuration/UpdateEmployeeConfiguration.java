@@ -1,5 +1,6 @@
 package one.bca.batch_mini_project.configuration;
 
+import one.bca.batch_mini_project.listener.RetryLogListener;
 import one.bca.batch_mini_project.model.Employee;
 import one.bca.batch_mini_project.model.Report;
 import one.bca.batch_mini_project.processor.UpdateEmployeeProcessor;
@@ -41,6 +42,10 @@ public class UpdateEmployeeConfiguration {
                 .reader(attendanceLogDbReader.itemReader(transactionManager.getDataSource()))
                 .processor(updateEmployeeProcessor.updateEmployee())
                 .writer(employeeWriter.employeeItemWriter(transactionManager.getDataSource()))
+                .faultTolerant()
+                .skip(Exception.class)
+                .skipLimit(5)
+                .listener(new RetryLogListener())
                 .taskExecutor(JobConfiguration.taskExecutor())
                 .build();
     }

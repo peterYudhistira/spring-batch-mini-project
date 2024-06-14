@@ -1,4 +1,3 @@
-drop table if exists attendance_log;
 create table if not exists attendance_log(
     attendance_id serial,
     emp_id int,
@@ -9,3 +8,7 @@ create table if not exists attendance_log(
     is_leave int,
     primary key(attendance_id)
 );
+
+update employee set emp_leave_left = 10;
+delete from attendance_log;
+ALTER SEQUENCE attendance_log_attendance_id_seq RESTART WITH 1;

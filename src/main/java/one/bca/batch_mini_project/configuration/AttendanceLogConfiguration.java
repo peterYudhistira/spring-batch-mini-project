@@ -1,5 +1,6 @@
 package one.bca.batch_mini_project.configuration;
 
+import one.bca.batch_mini_project.listener.RetryLogListener;
 import one.bca.batch_mini_project.model.Attendance;
 import one.bca.batch_mini_project.model.AttendanceLog;
 import one.bca.batch_mini_project.processor.AttendanceLogProcessor;
@@ -42,6 +43,10 @@ public class AttendanceLogConfiguration {
                 .reader(attendanceLogCsvReader.csvAttendanceReader())
                 .processor(attendanceLogProcessor.processAttendance())
                 .writer(attendanceLogWriter.itemWriter(transactionManager.getDataSource()))
+                .faultTolerant()
+                .retry(Exception.class)
+                .retryLimit(10)
+                .listener(new RetryLogListener())
                 .taskExecutor(JobConfiguration.taskExecutor())
                 .build();
     }

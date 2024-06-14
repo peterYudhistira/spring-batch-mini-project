@@ -20,4 +20,5 @@ public class ReportRowMapper implements RowMapper<Report> {
         report.setEmpLeaveLeft(rs.getInt("emp_leave_left"));
         return report;
     }
+
 }

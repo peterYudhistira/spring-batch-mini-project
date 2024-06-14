@@ -1,7 +1,6 @@
 package one.bca.batch_mini_project.configuration;
 
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +9,6 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
-@EnableBatchProcessing
 public class JobConfiguration {
     private final JobRepository jobRepository;
     private final AttendanceLogConfiguration attendanceLogConfiguration;
@@ -29,8 +27,9 @@ public class JobConfiguration {
         this.reportConfiguration = reportConfiguration;
     }
 
+    @Bean
     public Job employeeAttendanceJob() throws Exception {
-        return new JobBuilder("ReportingJob", jobRepository)
+        return new JobBuilder("reportingJob", jobRepository)
                 .start(attendanceLogConfiguration.calculateWorkingHoursStep())
                 .next(updateEmployeeConfiguration.updateEmployeeStep())
                 .next(reportConfiguration.generateReportStep())

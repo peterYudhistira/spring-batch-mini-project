@@ -27,7 +27,6 @@ public class BatchScheduler {
     @Scheduled(cron="0 0 1 * *")
     public void runJob(){
         try{
-            System.out.println("Running Batch Job!");
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("time", System.currentTimeMillis())
                     .toJobParameters();
